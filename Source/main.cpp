@@ -243,6 +243,16 @@ int WriteHeaders()
 					if (s.Find(";") == -1) continue;
 					s = s.Replace(";", "");
 
+					//This handles default definition in member declaration:
+					//int m = 3;
+					{
+						auto sarr = s.Split("=");
+						if (sarr.size() > 1)
+						{
+							s = sarr[0].Trim();
+						}
+					}
+
 					Member m;
 					vector<String> types = { "WString", "String", "float", "dFloat", "int", "double", "bool", "Vec2", "Vec3", "Vec4", "Mat3", "Mat4", "Plane", "Quat", "dVec2", "dVec3", "dVec4", "dMat3", "dMat4", "dPlane", "dQuat", "iVec2", "iVec3", "iVec4" };
 
@@ -830,7 +840,9 @@ int WriteHeaders()
 	stream2->WriteLine("	if (entity) entity->ResetUpdateHook();");
 	//stream2->WriteLine("	c->m_entity = this->entity;");
 	stream2->WriteLine("	c->entity = this->entity;");
-	stream2->WriteLine("	c->actor = this->As<Actor>();");
+//	stream2->WriteLine("	c->actor = this->As<Actor>();");
+	stream2->WriteLine("	c->actor = this;");
+
 	for (auto c : classes)
 	{
 		stream2->WriteLine("	{");
@@ -961,7 +973,8 @@ int WriteHeaders()
 	//stream->WriteLine("	std::shared_ptr<Entity> m_entity;");
 	stream->WriteLine("public:");
 	stream->WriteLine("\n	std::shared_ptr<Entity> entity;");
-	stream->WriteLine("\n	std::weak_ptr<Actor> actor;");
+	//stream->WriteLine("\n	std::weak_ptr<Actor> actor;");
+	stream->WriteLine("\n	Actor* actor;");
 	//stream->WriteLine("	const std::shared_ptr<Entity>& entity;\n");
 	stream->WriteLine("	Component();\n");
 
@@ -984,10 +997,10 @@ int WriteHeaders()
 	stream->WriteLine("		return _SaveComponentState(As<Component>(), j3);");
 	stream->WriteLine("	}");
 
-	stream->WriteLine("\n	virtual std::shared_ptr<Actor> GetActor()");
-	stream->WriteLine("	{");
-	stream->WriteLine("		return std::dynamic_pointer_cast<Actor>(this->actor.lock());");
-	stream->WriteLine("	}");
+	//stream->WriteLine("\n	virtual std::shared_ptr<Actor> GetActor()");
+	//stream->WriteLine("	{");
+	//stream->WriteLine("		return std::dynamic_pointer_cast<Actor>(this->actor.lock());");
+	//stream->WriteLine("	}");
 
 	stream->WriteLine("\n	virtual shared_ptr<Component> Copy()");
 	stream->WriteLine("	{");
