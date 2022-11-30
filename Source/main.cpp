@@ -113,8 +113,8 @@ int WriteHeaders()
 	stream->WriteLine("#include \"UltraEngine.h\"");
 	stream->WriteLine("");
 	stream->WriteLine("using namespace UltraEngine;");
-	stream->WriteLine("using namespace std;");
-	stream->WriteLine("");
+	stream->WriteLine("using namespace std;\n");
+
 	stream->WriteLine("class Component;");
 	stream->WriteLine("class Actor;");
 	stream->WriteLine("extern bool _LoadComponentState(shared_ptr<Component> component, nlohmann::json & j3);");
@@ -605,6 +605,7 @@ int WriteHeaders()
 	//}
 
 	stream->WriteLine("	\n	Actor();");
+	stream->WriteLine("	\n	virtual ~Actor();");
 	//stream->WriteLine("	Actor(std::shared_ptr<Entity> entity);");
 
 	stream->WriteLine("\n	template <class T>");
@@ -659,6 +660,20 @@ int WriteHeaders()
 	stream->WriteLine("};");
 	stream->WriteLine("");
 
+	stream->WriteLine("class FinalActorFactory : public UltraCore::ActorFactory {");
+	stream->WriteLine("	public:");
+	stream->WriteLine("	shared_ptr<ActorBase> CreateActor()");
+	stream->WriteLine("	{");
+	stream->WriteLine("		return make_shared<Actor>();");
+	stream->WriteLine("	}");
+	stream->WriteLine("};\n");
+
+	stream->WriteLine("inline int InitializeComponentSystem() {");
+	stream->WriteLine("	UltraCore::systemactorfactory = new FinalActorFactory;");
+	stream->WriteLine("	return 0;");
+	stream->WriteLine("}\n");
+	stream->WriteLine("inline int _init = InitializeComponentSystem();\n");
+
 	//auto stream2 = WriteFile("Source/Component System.cpp");
 	auto stream2 = CreateBufferStream();
 	//if (stream2 == NULL)
@@ -708,6 +723,14 @@ int WriteHeaders()
 
 	stream2->WriteLine("\nActor::Actor()" + defaults);
 	stream2->WriteLine("{}");
+
+	stream2->WriteLine("\nActor::~Actor()" + defaults);
+	stream2->WriteLine("{");
+	for (auto c : classes)
+	{
+		stream2->WriteLine("	if (m_" + c.name.Lower() + ") m_" + c.name.Lower() + "->actor = NULL;");
+	}
+	stream2->WriteLine("}");
 
 	// Actor::Load implementation
 	stream2->WriteLine("\nbool Actor::LoadState(nlohmann::json & j3) \n\
