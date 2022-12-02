@@ -624,9 +624,12 @@ int WriteHeaders()
 
 	stream->WriteLine("\n	virtual shared_ptr<Actor> Copy();");
 	//stream->WriteLine("	virtual void Start();");
-	stream->WriteLine("\n	virtual bool LoadState(nlohmann::json& j3);");
-	stream->WriteLine("\n	virtual bool SaveState(nlohmann::json& j3);");
-	stream->WriteLine("\n	virtual void Free();");
+	
+	stream->WriteLine("\nprotected:");
+	stream->WriteLine("	virtual bool LoadState(nlohmann::json& j3);");
+	stream->WriteLine("	virtual bool SaveState(nlohmann::json& j3);");
+	stream->WriteLine("	virtual void Free();");
+
 	stream->WriteLine("#ifdef DOUBLE_FLOAT");
 	stream->WriteLine("	virtual void Collision(std::shared_ptr<Entity> collidedentity, const dVec3& position, const dVec3& normal, const dFloat speed, std::shared_ptr<Material> collidedmaterial);");
 	stream->WriteLine("#else");
@@ -1000,6 +1003,7 @@ int WriteHeaders()
 	//stream->WriteLine("	const std::shared_ptr<Entity>& entity;\n");
 	stream->WriteLine("	Component();\n");
 
+	stream->WriteLine("protected:");
 	stream->WriteLine("#ifdef DOUBLE_FLOAT");
 	stream->WriteLine("	virtual void Collide(shared_ptr<Actor> collidedactor, const dVec3& position, const dVec3& normal, const dFloat speed) {}");
 	stream->WriteLine("#else");
