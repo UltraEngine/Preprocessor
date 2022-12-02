@@ -336,7 +336,6 @@ int WriteHeaders()
 		stream->WriteLine("class " + c.name + ";");
 	}
 
-
 	stream->WriteLine("\nclass Actor : public ActorBase");
 	stream->WriteLine("{");
 	//stream->WriteLine("	std::shared_ptr<Entity> m_entity;");
@@ -782,7 +781,7 @@ int WriteHeaders()
 	stream2->WriteLine("	if (actor == NULL) actor = CreateActor(collidedentity);");
 	for (auto c : classes)
 	{
-		stream2->WriteLine("	if (this->m_" + c.name.Lower() + ") this->m_" + c.name.Lower() + "->Collision(actor,position,normal,speed);");
+		stream2->WriteLine("	if (this->m_" + c.name.Lower() + ") this->m_" + c.name.Lower() + "->Collide(actor,position,normal,speed);");
 	}
 	/*
 	stream2->WriteLine("#ifdef DOUBLE_FLOAT");
@@ -1002,9 +1001,9 @@ int WriteHeaders()
 	stream->WriteLine("	Component();\n");
 
 	stream->WriteLine("#ifdef DOUBLE_FLOAT");
-	stream->WriteLine("	virtual void Collision(shared_ptr<Actor> collidedactor, const dVec3& position, const dVec3& normal, const dFloat speed) {}");
+	stream->WriteLine("	virtual void Collide(shared_ptr<Actor> collidedactor, const dVec3& position, const dVec3& normal, const dFloat speed) {}");
 	stream->WriteLine("#else");
-	stream->WriteLine("	virtual void Collision(shared_ptr<Actor> collidedactor, const Vec3& position, const Vec3& normal, const dFloat speed) {}");
+	stream->WriteLine("	virtual void Collide(shared_ptr<Actor> collidedactor, const Vec3& position, const Vec3& normal, const dFloat speed) {}");
 	stream->WriteLine("#endif");
 
 	//stream->WriteLine("	virtual void Start();");
