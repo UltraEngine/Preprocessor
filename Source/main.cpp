@@ -181,8 +181,8 @@ int WriteHeaders()
 
 					//if (funcname == "Start") continue;					
 					if (funcname == "ProcessEvent") continue;
-					if (funcname == "LoadState") continue;
-					if (funcname == "SaveState") continue;
+					if (funcname == "Load") continue;
+					if (funcname == "Save") continue;
 					//if (funcname == "CopyState") continue;
 					if (funcname == "Remove") continue;
 
@@ -626,8 +626,8 @@ int WriteHeaders()
 	//stream->WriteLine("	virtual void Start();");
 	
 	stream->WriteLine("\nprotected:");
-	stream->WriteLine("	virtual bool LoadState(nlohmann::json& j3);");
-	stream->WriteLine("	virtual bool SaveState(nlohmann::json& j3);");
+	stream->WriteLine("	virtual bool Load(nlohmann::json& j3);");
+	stream->WriteLine("	virtual bool Save(nlohmann::json& j3);");
 	stream->WriteLine("	virtual void Free();");
 
 	stream->WriteLine("#ifdef DOUBLE_FLOAT");
@@ -735,7 +735,7 @@ int WriteHeaders()
 	stream2->WriteLine("}");
 
 	// Actor::Load implementation
-	stream2->WriteLine("\nbool Actor::LoadState(nlohmann::json & j3) \n\
+	stream2->WriteLine("\nbool Actor::Load(nlohmann::json & j3) \n\
 {\n\
 	if (j3[\"components\"].is_array())\n\
 	{\n\
@@ -755,7 +755,7 @@ int WriteHeaders()
 	return true;\n\
 }");
 
-	stream2->WriteLine("\nbool Actor::SaveState(nlohmann::json& j3)");
+	stream2->WriteLine("\nbool Actor::Save(nlohmann::json& j3)");
 	stream2->WriteLine("{");
 	stream2->WriteLine("	j3[\"components\"] = nlohmann::json::array();");
 	for (auto c : classes)
@@ -763,7 +763,7 @@ int WriteHeaders()
 		stream2->WriteLine("	if (m_" + c.name.Lower() + ")");
 		stream2->WriteLine("	{");
 		stream2->WriteLine("		nlohmann::json info = nlohmann::json::object();");
-		stream2->WriteLine("		if (!m_" + c.name.Lower() + "->SaveState(info)) return false;");
+		stream2->WriteLine("		if (!m_" + c.name.Lower() + "->Save(info)) return false;");
 		stream2->WriteLine("		info[\"class\"] = \"" + c.name + "\";");
 		stream2->WriteLine("		j3[\"components\"].push_back(info);");
 		stream2->WriteLine("	}");
@@ -961,7 +961,7 @@ int WriteHeaders()
 	stream2->WriteLine("		if (j3[\"components\"].is_array() && j3[\"components\"].empty() == false)");
 	stream2->WriteLine("		{");
 	stream2->WriteLine("			auto actor = CreateActor(entity);");
-	stream2->WriteLine("			if (!actor->LoadState(j3)) return false;");
+	stream2->WriteLine("			if (!actor->Load(j3)) return false;");
 	stream2->WriteLine("			actors.push_back(actor);");
 	stream2->WriteLine("		}");
 	stream2->WriteLine("	}");
@@ -1013,12 +1013,12 @@ int WriteHeaders()
 	//stream->WriteLine("	virtual void Start();");
 	stream->WriteLine("	virtual void Update();");
 
-	stream->WriteLine("	virtual bool LoadState(nlohmann::json& j3)");
+	stream->WriteLine("	virtual bool Load(nlohmann::json& j3)");
 	stream->WriteLine("	{");
 	stream->WriteLine("		return _LoadComponentState(As<Component>(), j3);");
 	stream->WriteLine("	}");
 
-	stream->WriteLine("\n	virtual bool SaveState(nlohmann::json& j3)");
+	stream->WriteLine("\n	virtual bool Save(nlohmann::json& j3)");
 	stream->WriteLine("	{");
 	stream->WriteLine("		return _SaveComponentState(As<Component>(), j3);");
 	stream->WriteLine("	}");
