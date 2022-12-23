@@ -1088,7 +1088,7 @@ int WriteHeaders()
 			}
 			else if (m.type == "shared_ptr<Entity>")
 			{
-				stream->WriteLine("			j3[\"" + m.name + "\"] = { this->m_" + m.name + "->GETGUID();");
+				stream->WriteLine("			j3[\"" + m.name + "\"] = { this->m_" + m.name + "->GetUuid();");
 			}
 			else if (m.type == "bool" or m.type == "int" or m.type == "float" or m.type == "double" or m.type == "String" or m.type == "std::string" or m.type == "wstring" or m.type == "dFloat")
 			{
@@ -1100,7 +1100,7 @@ int WriteHeaders()
 			}
 			else if (m.type.Left(11) == "shared_ptr<")
 			{
-				stream->WriteLine("			if (c->" + m.name + " != NULL && c->" + m.name + "->As<Entity>()) j3[\"" + m.name + "\"] = c->" + m.name + "->As<Entity>()->GetGUID();");
+				stream->WriteLine("			if (c->" + m.name + " != NULL && c->" + m.name + "->As<Entity>()) j3[\"" + m.name + "\"] = c->" + m.name + "->As<Entity>()->GetUuid();");
 				stream->WriteLine("			if (c->" + m.name + " == NULL) j3[\"" + m.name + "\"] = nullptr;");
 			}
 		}
