@@ -1,0 +1,11 @@
+.vs/
+x64/
+PreProcessor.vcxproj.user
+**.props
+**.exe
+**.pdb
+
+# Don't commit generated files
+Source/ComponentSystem.h
+Source/ComponentSystem.cpp
+Source/Components/**
