@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <UltraEnginePath>D:/SteamLibrary/steamapps/common/Ultra App Kit</UltraEnginePath>
+    <UltraEnginePath>C:/Program Files (x86)/Steam/steamapps/common/Ultra App Kit</UltraEnginePath>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
