@@ -1,7 +1,7 @@
 #include "UltraEngine.h"
 using namespace UltraEngine;
 
-// 230102 - reep: Make me compatible with the engine.
+// 230102 - reep: Comment me out if you're compiling with the full engine.
 #if !defined (Eof)
 #define Eof EOF
 #endif
@@ -666,7 +666,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 	stream->WriteLine("\n	template <class T>");
 	stream->WriteLine("	std::shared_ptr<T> GetComponent()");
 	stream->WriteLine("	{");
-	stream->WriteLine("		for (auto c : components)\n		{\n			auto o = std::dynamic_pointer_cast<T>(c);\n			if (o) return o;\n		}\n        return NULL"); // 220102 - reep: This wasn't returning anything if null..
+	stream->WriteLine("		for (auto c : components)\n		{\n			auto o = std::dynamic_pointer_cast<T>(c);\n			if (o) return o;\n		}\n        return NULL;"); // 220102 - reep: This wasn't returning anything if null..
 	stream->WriteLine("	}");
 
 	stream->WriteLine("\n	virtual shared_ptr<Actor> Copy();");
