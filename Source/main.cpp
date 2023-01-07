@@ -95,7 +95,7 @@ void ProcessDir(const WString& path, const WString& componentpath = "Source/Comp
 					Print("Forcing a rebuild as \"" + path_to_components + fullpath + "\" has been updated since the creation of the component system header file.");
 					rebuild = true;
 				}
-							
+
 				ComponentInfo info;
 				info.name = file.ToString();
 				info.path = path.ToString();
@@ -391,16 +391,16 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 	{
 		stream->WriteLine("	std::shared_ptr<" + c.name + "> m_" + c.name.Lower() + ";");
 	}
-	
+
 	int countuniquemethods = 0;
 	for (auto m : uniquemethods)
 	{
-		stream->WriteLine("\n	struct ActorMethod" +String(countuniquemethods)+ "Arguments");
+		stream->WriteLine("\n	struct ActorMethod" + String(countuniquemethods) + "Arguments");
 		stream->WriteLine("	{");
 		int a = 0;
 		for (auto arg : m.arguments)
 		{
-			stream->WriteLine("		" + arg.type.Replace("const","").Replace("&","").Trim() + " arg"+ String(a) + ";");
+			stream->WriteLine("		" + arg.type.Replace("const", "").Replace("&", "").Trim() + " arg" + String(a) + ";");
 			a++;
 		}
 		stream->WriteLine("	};");
@@ -418,13 +418,13 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 			if (args != "") args += ", ";
 			args += arg.type;
 		}
-		stream->WriteLine("		"+m.returntype+" (Actor::* method"+String(countuniquemethods)+")("+args+");");
+		stream->WriteLine("		" + m.returntype + " (Actor::* method" + String(countuniquemethods) + ")(" + args + ");");
 		countuniquemethods++;
 	}
 	countuniquemethods = 0;
 	for (auto m : uniquemethods)
 	{
-		stream->WriteLine("		ActorMethod" + String(countuniquemethods) + "Arguments args" + String(countuniquemethods) +";");
+		stream->WriteLine("		ActorMethod" + String(countuniquemethods) + "Arguments args" + String(countuniquemethods) + ";");
 		countuniquemethods++;
 	}
 	countuniquemethods = 0;
@@ -461,7 +461,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 			if (args != "") args += ", ";
 			args += arg.type;
 		}
-		stream->WriteLine("\n		ActorMethod(" + m.returntype + " (Actor::* m)(" + args + ") ) : "+ nullmethods +" {");
+		stream->WriteLine("\n		ActorMethod(" + m.returntype + " (Actor::* m)(" + args + ") ) : " + nullmethods + " {");
 		stream->WriteLine("			method" + String(countuniquemethods) + " = m;");
 		stream->WriteLine("		}");
 		countuniquemethods++;
@@ -527,7 +527,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 		for (auto arg : m.arguments)
 		{
 			if (args != "") args += ", ";
-			args += "(*it).m.args"+String(ii)+".arg" + String(iii);
+			args += "(*it).m.args" + String(ii) + ".arg" + String(iii);
 			iii++;
 		}
 		if (ii == 0)
@@ -539,7 +539,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 			stream->WriteLine("				else if ((*it).m.method" + String(ii) + " != NULL)");
 		}
 		stream->WriteLine("				{");
-		stream->WriteLine("					(t.get()->*((*it).m.method"+String(ii)+"))("+args+");");
+		stream->WriteLine("					(t.get()->*((*it).m.method" + String(ii) + "))(" + args + ");");
 		stream->WriteLine("				}");
 		ii++;
 	}
@@ -578,7 +578,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 		}
 		auto args2 = args;
 		if (args2 != "") args2 = ", " + args2;
-		stream->WriteLine("	virtual void Connect(ActorMethod inmethod, std::shared_ptr<Actor> target, " + m.returntype + "(Actor::* outmethod)(" + args + ")" + args2 +")");
+		stream->WriteLine("	virtual void Connect(ActorMethod inmethod, std::shared_ptr<Actor> target, " + m.returntype + "(Actor::* outmethod)(" + args + ")" + args2 + ")");
 		stream->WriteLine("	{");
 		stream->WriteLine("		Connection c;");
 		stream->WriteLine("		c.m = outmethod;");
@@ -586,7 +586,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 		int iii = 0;
 		for (auto arg : m.arguments)
 		{
-			stream->WriteLine("		c.m.args" + String(ii) + ".arg" +String(iii)+ " = " + arg.name + ";");
+			stream->WriteLine("		c.m.args" + String(ii) + ".arg" + String(iii) + " = " + arg.name + ";");
 			iii++;
 		}
 		stream->WriteLine("		connections[inmethod.GetPtr()].push_back(c);");
@@ -671,7 +671,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 
 	stream->WriteLine("\n	virtual shared_ptr<Actor> Copy();");
 	//stream->WriteLine("	virtual void Start();");
-	
+
 	stream->WriteLine("\nprotected:");
 	stream->WriteLine("	virtual bool Load(nlohmann::json& j3);");
 	stream->WriteLine("	virtual bool Save(nlohmann::json& j3);");
@@ -709,7 +709,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 	stream->WriteLine("};");
 	stream->WriteLine("");
 
-	stream->WriteLine("class FinalActorFactory : public UltraCore::ActorFactory {");
+	stream->WriteLine("class FinalActorFactory : public UltraEngine::Core::ActorFactory {");
 	stream->WriteLine("	public:");
 	stream->WriteLine("	shared_ptr<ActorBase> CreateActor()");
 	stream->WriteLine("	{");
@@ -718,7 +718,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 	stream->WriteLine("};\n");
 
 	stream->WriteLine("inline int InitializeComponentSystem() {");
-	stream->WriteLine("	UltraCore::systemactorfactory = new FinalActorFactory;");
+	stream->WriteLine("	UltraEngine::Core::systemactorfactory = new FinalActorFactory;");
 	stream->WriteLine("	return 0;");
 	stream->WriteLine("}\n");
 	stream->WriteLine("inline int _init = InitializeComponentSystem();\n");
@@ -912,7 +912,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 	stream2->WriteLine("	if (entity) entity->ResetUpdateHook();");
 	//stream2->WriteLine("	c->m_entity = this->entity;");
 	stream2->WriteLine("	c->entity = this->entity;");
-//	stream2->WriteLine("	c->actor = this->As<Actor>();");
+	//	stream2->WriteLine("	c->actor = this->As<Actor>();");
 	stream2->WriteLine("	c->actor = this;");
 
 	for (auto c : classes)
@@ -996,7 +996,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 		//stream2->WriteLine("	FireSignal(SIGNALID_" + c.name.Upper() + ");");
 		if (c.returntype != "void") stream2->WriteLine("	return result;");*/
 		stream2->WriteLine("}");
-		
+
 		stream2->WriteLine("");
 	}
 
@@ -1269,7 +1269,7 @@ const WString GetStringArg(nlohmann::json& j3, const WString& defaultval = "")
 
 int DisplayHelp()
 {
-	Print("Application built: " + String(__DATE__) + " at: " + String(__TIME__) +"\n");
+	Print("Application built: " + String(__DATE__) + " at: " + String(__TIME__) + "\n");
 	Print("Usage: \n===========");
 	Print("Run this program in the pre-build step of the compiling process.\nThis will automatically generated files for the Ultra Engine Entity Component System relative to the project file.");
 #if defined (_WIN32)
