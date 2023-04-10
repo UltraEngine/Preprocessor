@@ -76,7 +76,7 @@ void ProcessDir(const WString& path, const WString& componentpath = "Source/Comp
 	{
 		if (!CreateDir(path_to_components))
 		{
-			Print("Error: Failed to create directory \"" + path_to_components + "\"!");
+			Print("Error: Failed to create directory \"" + FixPath(path_to_components) + "\"!");
 		}
 	}
 
@@ -92,7 +92,7 @@ void ProcessDir(const WString& path, const WString& componentpath = "Source/Comp
 			{
 				if (rebuild == false and FileTime(path_to_components + fullpath) > headertime)
 				{
-					Print("Forcing a rebuild as \"" + path_to_components + fullpath + "\" has been updated since the creation of the component system header file.");
+					Print("Forcing a rebuild as \"" + FixPath(path_to_components + fullpath) + "\" has been updated since the creation of the component system header file.");
 					rebuild = true;
 				}
 
@@ -146,7 +146,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 	auto stream = CreateBufferStream();
 	if (stream == NULL)
 	{
-		Print("Error: Failed to write file \"" + path_to_src + componentsystemheader + "\"");
+		Print("Error: Failed to write file \"" + FixPath(path_to_src + componentsystemheader) + "\"");
 		return 1;
 	}
 
@@ -1104,7 +1104,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 
 	if (!stream->data->Save(path_to_src + componentsystemheader))
 	{
-		Print("Error: Failed to write file \"" + path_to_src + componentsystemheader + "\"");
+		Print("Error: Failed to write file \"" + FixPath(path_to_src + componentsystemheader) + "\"");
 		return 1;
 	}
 
@@ -1246,7 +1246,7 @@ int WriteHeaders(const WString& srcdir = "Source/", const WString& filename = "C
 
 	if (!stream->data->Save(path_to_src + componentsystemcpp))
 	{
-		Print("Error: Failed to write file \"" + path_to_src + componentsystemcpp + "\"");
+		Print("Error: Failed to write file \"" + FixPath(path_to_src + componentsystemcpp) + "\"");
 		return 1;
 	}
 
@@ -1341,7 +1341,7 @@ int main(int argc, const char* argv[])
 		{
 			if (!CreateDir(user_src_dir))
 			{
-				Print("Error: Failed to create directory \"" + user_src_dir + "\"!");
+				Print("Error: Failed to create directory \"" + FixPath(user_src_dir) + "\"!");
 				return DisplayHelp();
 			}
 		}
